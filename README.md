@@ -1,6 +1,6 @@
 # ContractsPolivas — публичная витрина заданий BROWN SWARM
 
-**Статус:** PUBLIC INDEX / TWO TEST CONTRACTS PUBLISHED — C0001 DeepSeek, V0002 независимая проверка; фактическая отправка и получение результата NOT VERIFIED.
+**Статус:** PUBLIC INDEX / TWO TEST CONTRACTS PUBLISHED — C001D000TST DeepSeek, V002D001TST независимая проверка; фактическая отправка и получение результата NOT VERIFIED.
 
 Этот репозиторий содержит только специально подготовленные для открытого доступа короткие карточки контрактов и, при необходимости, публичные промпты для ChatGPT, Gemini и DeepSeek. Любой желающий может читать эти файлы.
 
