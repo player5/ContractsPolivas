@@ -9,7 +9,7 @@
 
 ## Рабочая цепочка
 
-`public card → model in Firefox → full answer capture → (DeepSeek only) Publisher prompt → public results file → DONE`
+`public card → model in Firefox → full answer capture → (DeepSeek only) GPT Publisher prompt (Gemini/Drive fallback) → readback → DONE`
 
 Если ответ не захвачен за 10 минут, Dispatcher автоматически повторяет отправку с новым внутренним Command ID. Повторяется каждые 10 минут до получения ответа. Номер опубликованной карточки не требуется менять для транспортного повтора.
 
