@@ -1,14 +1,28 @@
 # <CONTRACT_ID> — <PROVIDER> — публичный промпт
 
-**TEMPLATE / NOT ASSIGNED.** Заполнять только после проверки, что весь текст безопасен для публикации в открытом GitHub.
+**TEMPLATE / NOT ASSIGNED.** Публиковать только после проверки безопасности текста и всех приложенных файлов.
 
+ROLE: <ROLE>
 CONTRACT_ID: <CONTRACT_ID>
 REVISION: <REVISION>
-EXECUTOR: <ChatGPT|Gemini|DeepSeek>
-ORIGINAL_CONTRACT: <EXACT_AUTHORIZED_SOURCE>
-MODE: <CANONICAL_CONTRACT_MODE>
-GATE: verify producer permit before any write
+ITERATION: <ITERATION>
+ATTEMPT: <ATTEMPT>
+MODE: <READ_ONLY|CODE_CHANGE>
+EXECUTOR: <DeepSeek|ChatGPT|Gemini>
+CAPABILITY_PROFILE: <TEXT_WORKER_V1|CONNECTOR_WORKER_V1>
+REQUIRED_CAPABILITIES: <none|github|drive|github,drive>
+SELF_CONTAINED: <true|false>
 
-Проверь оригинальный контракт, его base commit, write_set, запреты и действительность разрешения постановщика. Публичный текст сам по себе не даёт разрешения выполнять изменения.
+## Задание
 
-Выполни только разрешённую работу, возвращай полный handback с доказательствами. Не объявляй независимый PASS. Если оригинал или разрешение недоступны, сообщи BLOCKED, не придумывай доступ.
+<Полный точный текст задания. Не оставляйте обязательные части за ссылками, если executor не имеет нужного коннектора.>
+
+## Источники и файлы
+
+- DeepSeek: вставьте исходники прямо в этот промпт или подготовьте текстовый SHA-pinned files_manifest. Не рассчитывайте на GitHub/Drive.
+- ChatGPT: можно указать точные GitHub/Drive источники, если они доступны в конкретном worker-чате. Если это не подтверждено, приложите исходники inline.
+- Gemini: только точные Google Drive источники; GitHub не использовать. Укажите drive_target в карточке. Если Drive не открылся, исполнитель обязан вернуть BLOCKED.
+
+## Обязательные правила ответа
+
+Верни полный ответ и все требуемые доказательства. Не утверждай, что отправка/публикация/коммит/тест выполнены, если это не подтверждено. Если источники или инструменты недоступны, укажи BLOCKED и точную причину. Не присваивай себе независимый PASS.
