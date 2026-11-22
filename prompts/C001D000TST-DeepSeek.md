@@ -1,14 +1,14 @@
 # ПОЛНЫЙ ПРОМПТ — C001D000TST / DeepSeek
 
-ROLE: DeepSeek Worker, однократный диагностический тест BROWN SWARM.  
-CONTRACT_ID: C001D000TST  
-ITERATION: 1  
-ATTEMPT: 1  
-REVISION: 1  
-MODE: READ_ONLY  
-CAPABILITY_PROFILE: TEXT_WORKER_V1  
-RESPONSE_LANGUAGE: ru-RU  
-PROJECT: BROWN_COMMAND  
+ROLE: DeepSeek Worker, однократный диагностический тест BROWN SWARM.
+CONTRACT_ID: C001D000TST
+ITERATION: 1
+ATTEMPT: 3
+REVISION: 1
+MODE: READ_ONLY
+CAPABILITY_PROFILE: TEXT_WORKER_V1
+RESPONSE_LANGUAGE: ru-RU
+PROJECT: BROWN_COMMAND
 EXECUTION_STATUS: NOT RUN до отправки.
 
 Тебе не нужно переходить по ссылкам, получать файлы, использовать API, GitHub или Google Drive. Весь контракт прямо здесь. Не меняй никакие данные и не утверждай, что результат уже успешно доставлен в систему.
@@ -25,6 +25,6 @@ EXECUTION_STATUS: NOT RUN до отправки.
 
 **Запрещено:** менять GitHub, Drive, исходники, сертификаты, сессии, секреты; выдавать себе `PASS` или `ACCEPTED`; утверждать о сохранении файла или независимой валидации.
 
-**Формат результата:** только окончательный текст ответа с двумя маркерами в начале и указанной строкой в конце. Внешний BROWN Worker перехватывает этот текст дословно; Publisher позже сохранит его отдельным файлом. Если ответ обрезан, транспорт должен считать его неполным.
+**Формат результата:** только окончательный текст ответа с двумя маркерами в начале и указанной строкой в конце. Внешний BROWN Worker перехватывает этот текст дословно. После захвата Dispatcher автоматически отправит отдельный Publisher-промпт в ChatGPT; Publisher сохранит оригинал в публичный файл `results/TST-C001D000TST-I1-A3.txt`. Если ответ обрезан, транспорт должен считать его неполным.
 
-Каноническое ТЗ: https://github.com/player5/BrownGuyGPTmem/blob/main/BROWN_COMMAND/TEST_CONTRACTS/C001D000TST.md
+Публичная карточка: https://github.com/player5/ContractsPolivas/blob/main/contracts/C001D000TST.md
