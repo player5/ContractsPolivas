@@ -1,0 +1,10 @@
+{
+  "schema": "brown.swarm.public-files.v1",
+  "contract_id": "<CONTRACT_ID>",
+  "files": [
+    {
+      "path": "files/<CONTRACT_ID>/source.txt",
+      "blob_sha": "<40_HEX_GIT_BLOB_SHA>"
+    }
+  ]
+}
