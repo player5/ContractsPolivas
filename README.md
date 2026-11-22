@@ -35,8 +35,10 @@ Publisher — это промпт в обычном чате, не отдель�
 Для новых заданий Worker использует версионированную строку:
 
 ~~~text
-BROWN_STATUS|v1|<CONTRACT_ID>|<DELIVERY_ID>|<STATUS>
+BROWN_STATUS|v1|<CONTRACT_ID>|{{BROWN_DELIVERY_ID}}|<STATUS>
 ~~~
+
+`{{BROWN_DELIVERY_ID}}` подставляет Dispatcher из envelope непосредственно перед отправкой и фиксирует итоговый текст промпта. Worker не придумывает ID. Если placeholder не подставлен, новую доставку не отправлять.
 
 Канонические статусы:
 
