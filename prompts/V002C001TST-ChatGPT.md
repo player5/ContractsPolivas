@@ -13,7 +13,7 @@ SOURCE_DELIVERY_ID: PUB-C001D000TST-I2-A1
 EXPECTED_RESULT_PATH: results/PUB-C001D000TST-I2-A1.txt
 EXPECTED_TOPIC: Как устроена автоматизация современного макаронного завода
 
-**Начинай основную независимую проверку только когда предшественник учтён как PROCESSED.** Действуй по уже переданным контрактам и реальным файлам, ничего не придумывай.
+**Сначала выполни короткую служебную вставку, если она приложена Dispatcher:** запиши доставленный результат C001 и убери его строку из активного INDEX. Затем переходи к независимой проверке текста по критериям ниже. Не требуй отдельного PROCESSED или SHA-гейта. Действуй по реально доступному результату, ничего не придумывай.
 
 1. Прочитай карточку [C001D000TST](https://github.com/player5/ContractsPolivas/blob/main/contracts/C001D000TST.md) и её [полный промпт](https://github.com/player5/ContractsPolivas/blob/main/prompts/C001D000TST-DeepSeek.md).
 2. Прочитай фактический текст результата: https://raw.githubusercontent.com/player5/ContractsPolivas/main/results/PUB-C001D000TST-I2-A1.txt. Если файл недоступен, честно верни `RESULT_PENDING` и не заявляй PASS.
