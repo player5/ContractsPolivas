@@ -1,18 +1,31 @@
 # Индекс публичных контрактов BROWN SWARM
 
-**Активные карточки: 1.** Неактивные шаблоны: 1.
+**Активных карточек: 1.** Ожидает подтверждённой публикации: 1. Архивных/заменённых: 2.
+
+Dispatcher читает этот `INDEX.md` **по публичному HTTPS без GitHub API и без токена**. Строки `RETIRED`, `PROCESSED` и `WAITING_PUBLICATION` не выдаются на исполнение. Уполномоченный Publisher/Producer меняет статусы только с фактическим readback.
 
 | Contract ID | Тип | Исполнитель | Карточка | Промпт | Состояние |
 |---|---|---|---|---|---|
-| **C001D000TST** | C / тест | DeepSeek | [C001D000TST](contracts/C001D000TST.md) | [полный промпт](prompts/C001D000TST-DeepSeek.md) | PUBLISHED / attempt 3 / READY |
-| **V002D001TST** | V / шаблон | ChatGPT | [V002D001TST](contracts/V002D001TST.md) | [полный промпт](prompts/V002D001TST-ChatGPT.md) | TEMPLATE / AUTO-DISPATCH DISABLED |
+| **C003D000TST** | C / тест на 100 слов | DeepSeek | [C003D000TST](contracts/C003D000TST.md) | [полный промпт](prompts/C003D000TST-DeepSeek.md) | PUBLISHED / READY / attempt 1 |
+| **V004D003TST** | V / независимая проверка C003 | ChatGPT | [V004D003TST](contracts/V004D003TST.md) | [полный промпт](prompts/V004D003TST-ChatGPT.md) | WAITING_PUBLICATION / DISABLED / D003 |
+| **C001D000TST** | C / старый тест | DeepSeek | [C001D000TST](contracts/C001D000TST.md) | [исторический промпт](prompts/C001D000TST-DeepSeek.md) | RETIRED / SUPERSEDED / NOT ACCEPTED |
+| **V002D001TST** | V / старый тест | ChatGPT | [V002D001TST](contracts/V002D001TST.md) | [исторический промпт](prompts/V002D001TST-ChatGPT.md) | RETIRED / SUPERSEDED / NOT RUN |
 
-## Рабочая цепочка
+## GATE для нового теста
 
-`public card → model in Firefox → full answer capture → (DeepSeek only) GPT Publisher prompt (Gemini/Drive fallback) → readback → DONE`
+1. C003 выполняет 100-словный текст. Его полный оригинальный ответ сохраняется как `PUB-C003D000TST-I1-A1`.
+2. ChatGPT Publisher должен сохранить **точные байты исходного ответа** в `results/PUB-C003D000TST-I1-A1.txt` и проверить их SHA-256 по реальному захваченному `ORIGINAL_SHA256` — клик Send и таймер не считаются публикацией.
+3. После доказанного readback Publisher/Producer меняет C003 на `PROCESSED / RESULT_PUBLISHED / VALIDATION_PENDING`, **убирает его из активной очереди** и переводит V004 на `PUBLISHED / READY_FOR_VALIDATION`. История C003 остаётся.
+4. V004 независимо проверяет, что текст между `TEXT_BEGIN` и `TEXT_END` содержит ровно 100 слов на нужную тему, и сообщает отдельный содержательный PASS/FAIL. После подтверждённой проверки он тоже выводится из активной очереди.
+5. При дефекте до интеграции используем **конечную F**, например `C003D000TSTF`: приоритет вне обычной очереди, но только при пройденных зависимостях. Не выдавать новый обычный номер для такого возврата.
 
-Если ответ не захвачен за 10 минут, Dispatcher автоматически повторяет отправку с новым внутренним Command ID. Повторяется каждые 10 минут до получения ответа. Номер опубликованной карточки не требуется менять для транспортного повтора.
+**Готовая инструкция для Publisher:** [C003D000TST-Publisher-ChatGPT](prompts/C003D000TST-Publisher-ChatGPT.md).
 
-Publisher — промпт, не отдельная программа. После подтверждённой записи и readback Publisher возвращает `BROWN_STATUS|<CONTRACT_ID>|DONE`. Отдельный Validator в стандартном цикле не запускается.
+**Ограничение FIX12P4:** текущий EXE формирует Publisher-промпт внутри программы и не загружает указанный файл с инструкцией автоматически; также в нём нет доказательной блокировки зависимостей по фактическому SHA результата. Поэтому автоматическое переключение C003→V004 пока **NOT IMPLEMENTED**, даже если отдельный промпт уже опубликован. Не приписывать программе реализованные функции.
 
-Исторические исправления ID: [history/pilot-id-correction-2026-11-21](history/pilot-id-correction-2026-11-21/).
+## История и нумерация
+
+- [Сквозные номера, D-зависимости и конечная F](NUMBERING.md).
+- C001/V002 сохранены в истории, без удаления файлов и без ложных COMPLETED/ACCEPTED.
+- Transport-повтор меняет `DISPATCH-...`/`PUBLISH-...`, но не ID контракта.
+- Публичные карточки ≠ факт отправки, публикации, валидации или приёмки.
