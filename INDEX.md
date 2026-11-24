@@ -4,6 +4,11 @@
 
 | Contract ID | Тип | Исполнитель | Карточка | Промпт | Состояние |
 |---|---|---|---|---|---|
+| **C005D000TST** | C / 100 слов | DeepSeek | [C005D000TST](contracts/C005D000TST.md) | [полный промпт](prompts/C005D000TST-DeepSeek.md) | PUBLISHED / READY / I1 A1 |
+| **C006G000TST** | C / HELLO_WORLD.txt | Gemini | [C006G000TST](contracts/C006G000TST.md) | [полный промпт](prompts/C006G000TST-Gemini.md) | PUBLISHED / READY / I1 A1 |
+| **V007C005+006TST** | V / независимая проверка обоих результатов | ChatGPT | [V007C005+006TST](contracts/V007C005+006TST.md) | [полный промпт](prompts/V007C005+006TST-ChatGPT.md) | PUBLISHED / READY / DEP 005+006 / I1 A1 |
+
+**Уточнение для Dispatcher 0.9.1 / Firefox Worker 0.8.5 (24.11.2026):** для новых контрактов действует верхнее уточнение [NUMBERING.md](NUMBERING.md): прямая доставка результатов D/G в GPT независимо от готовности Validator; выдача зависимого задания разрешена только после успешного чтения INDEX, в котором отсутствуют все сквозные номера блокеров. Получение ответа и BROWN_FINISH сами по себе зависимость не снимают. Старое описание пилота ниже сохранено для истории.
 
 ## Что делает Dispatcher
 
