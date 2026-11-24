@@ -4,6 +4,17 @@
 
 | Contract ID | Тип | Исполнитель | Карточка | Промпт | Состояние |
 |---|---|---|---|---|---|
+| **C008D000TST** | C | DeepSeek | [C008D000TST](contracts/C008D000TST.md) | [Задание](prompts/C008D000TST-DeepSeek.md) | PUBLISHED |
+| **C009D000TST** | C | DeepSeek | [C009D000TST](contracts/C009D000TST.md) | [Задание](prompts/C009D000TST-DeepSeek.md) | PUBLISHED |
+| **C010D000TST** | C | DeepSeek | [C010D000TST](contracts/C010D000TST.md) | [Задание](prompts/C010D000TST-DeepSeek.md) | PUBLISHED |
+| **C011D000TST** | C | DeepSeek | [C011D000TST](contracts/C011D000TST.md) | [Задание](prompts/C011D000TST-DeepSeek.md) | PUBLISHED |
+| **C012D000TST** | C | DeepSeek | [C012D000TST](contracts/C012D000TST.md) | [Задание](prompts/C012D000TST-DeepSeek.md) | PUBLISHED |
+| **C013G000TST** | C | Gemini | [C013G000TST](contracts/C013G000TST.md) | [Задание](prompts/C013G000TST-Gemini.md) | PUBLISHED |
+| **C014G000TST** | C | Gemini | [C014G000TST](contracts/C014G000TST.md) | [Задание](prompts/C014G000TST-Gemini.md) | PUBLISHED |
+| **C015G000TST** | C | Gemini | [C015G000TST](contracts/C015G000TST.md) | [Задание](prompts/C015G000TST-Gemini.md) | PUBLISHED |
+| **C016G000TST** | C | Gemini | [C016G000TST](contracts/C016G000TST.md) | [Задание](prompts/C016G000TST-Gemini.md) | PUBLISHED |
+| **C017G000TST** | C | Gemini | [C017G000TST](contracts/C017G000TST.md) | [Задание](prompts/C017G000TST-Gemini.md) | PUBLISHED |
+| **V018C008+009+010+011+012+013+014+015+016+017TST** | V | ChatGPT | [V018C008+009+010+011+012+013+014+015+016+017TST](contracts/V018C008+009+010+011+012+013+014+015+016+017TST.md) | [Задание](prompts/V018C008+009+010+011+012+013+014+015+016+017TST-ChatGPT.md) | PUBLISHED |
 
 **Уточнение для Dispatcher 0.9.1 / Firefox Worker 0.8.5 (24.11.2026):** для новых контрактов действует верхнее уточнение [NUMBERING.md](NUMBERING.md): прямая доставка результатов D/G в GPT независимо от готовности Validator; выдача зависимого задания разрешена только после успешного чтения INDEX, в котором отсутствуют все сквозные номера блокеров. Получение ответа и BROWN_FINISH сами по себе зависимость не снимают. Старое описание пилота ниже сохранено для истории.
 
