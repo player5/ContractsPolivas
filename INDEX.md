@@ -4,6 +4,25 @@
 
 | Contract ID | Тип | Исполнитель | Карточка | Промпт | Состояние |
 |---|---|---|---|---|---|
+| **C019D000TST** | C | DeepSeek | [C019D000TST](contracts/C019D000TST.md) | [Задание](prompts/C019D000TST-DeepSeek.md) | PUBLISHED |
+| **C020D000TST** | C | DeepSeek | [C020D000TST](contracts/C020D000TST.md) | [Задание](prompts/C020D000TST-DeepSeek.md) | PUBLISHED |
+| **C021D000TST** | C | DeepSeek | [C021D000TST](contracts/C021D000TST.md) | [Задание](prompts/C021D000TST-DeepSeek.md) | PUBLISHED |
+| **C022D000TST** | C | DeepSeek | [C022D000TST](contracts/C022D000TST.md) | [Задание](prompts/C022D000TST-DeepSeek.md) | PUBLISHED |
+| **C023D000TST** | C | DeepSeek | [C023D000TST](contracts/C023D000TST.md) | [Задание](prompts/C023D000TST-DeepSeek.md) | PUBLISHED |
+| **C024D000TST** | C | DeepSeek | [C024D000TST](contracts/C024D000TST.md) | [Задание](prompts/C024D000TST-DeepSeek.md) | PUBLISHED |
+| **C025D000TST** | C | DeepSeek | [C025D000TST](contracts/C025D000TST.md) | [Задание](prompts/C025D000TST-DeepSeek.md) | PUBLISHED |
+| **C026D000TST** | C | DeepSeek | [C026D000TST](contracts/C026D000TST.md) | [Задание](prompts/C026D000TST-DeepSeek.md) | PUBLISHED |
+| **C027D000TST** | C | DeepSeek | [C027D000TST](contracts/C027D000TST.md) | [Задание](prompts/C027D000TST-DeepSeek.md) | PUBLISHED |
+| **C028D000TST** | C | DeepSeek | [C028D000TST](contracts/C028D000TST.md) | [Задание](prompts/C028D000TST-DeepSeek.md) | PUBLISHED |
+| **C029D000TST** | C | DeepSeek | [C029D000TST](contracts/C029D000TST.md) | [Задание](prompts/C029D000TST-DeepSeek.md) | PUBLISHED |
+| **C030D000TST** | C | DeepSeek | [C030D000TST](contracts/C030D000TST.md) | [Задание](prompts/C030D000TST-DeepSeek.md) | PUBLISHED |
+| **C031D000TST** | C | DeepSeek | [C031D000TST](contracts/C031D000TST.md) | [Задание](prompts/C031D000TST-DeepSeek.md) | PUBLISHED |
+| **C032D000TST** | C | DeepSeek | [C032D000TST](contracts/C032D000TST.md) | [Задание](prompts/C032D000TST-DeepSeek.md) | PUBLISHED |
+| **C033D000TST** | C | DeepSeek | [C033D000TST](contracts/C033D000TST.md) | [Задание](prompts/C033D000TST-DeepSeek.md) | PUBLISHED |
+| **C034G000TST** | C | Gemini | [C034G000TST](contracts/C034G000TST.md) | [Задание](prompts/C034G000TST-Gemini.md) | PUBLISHED |
+| **C035G000TST** | C | Gemini | [C035G000TST](contracts/C035G000TST.md) | [Задание](prompts/C035G000TST-Gemini.md) | PUBLISHED |
+| **C036G000TST** | C | Gemini | [C036G000TST](contracts/C036G000TST.md) | [Задание](prompts/C036G000TST-Gemini.md) | PUBLISHED |
+| **V037C019+020+021+022+023+024+025+026+027+028+029+030+031+032+033+034+035+036TST** | V | ChatGPT | [V037C019+020+021+022+023+024+025+026+027+028+029+030+031+032+033+034+035+036TST](contracts/V037C019+020+021+022+023+024+025+026+027+028+029+030+031+032+033+034+035+036TST.md) | [Задание](prompts/V037C019+020+021+022+023+024+025+026+027+028+029+030+031+032+033+034+035+036TST-ChatGPT.md) | PUBLISHED |
 
 **Уточнение для Dispatcher 0.9.1 / Firefox Worker 0.8.5 (24.11.2026):** для новых контрактов действует верхнее уточнение [NUMBERING.md](NUMBERING.md): прямая доставка результатов D/G в GPT независимо от готовности Validator; выдача зависимого задания разрешена только после успешного чтения INDEX, в котором отсутствуют все сквозные номера блокеров. Получение ответа и BROWN_FINISH сами по себе зависимость не снимают. Старое описание пилота ниже сохранено для истории.
 
