@@ -5,7 +5,6 @@
 | Contract ID | Тип | Исполнитель | Карточка | Промпт | Состояние |
 |---|---|---|---|---|---|
 | **C013G000TST** | C | Gemini | [C013G000TST](contracts/C013G000TST.md) | [Задание](prompts/C013G000TST-Gemini.md) | PUBLISHED |
-| **C016G000TST** | C | Gemini | [C016G000TST](contracts/C016G000TST.md) | [Задание](prompts/C016G000TST-Gemini.md) | PUBLISHED |
 | **C017G000TST** | C | Gemini | [C017G000TST](contracts/C017G000TST.md) | [Задание](prompts/C017G000TST-Gemini.md) | PUBLISHED |
 | **V018C008+009+010+011+012+013+014+015+016+017TST** | V | ChatGPT | [V018C008+009+010+011+012+013+014+015+016+017TST](contracts/V018C008+009+010+011+012+013+014+015+016+017TST.md) | [Задание](prompts/V018C008+009+010+011+012+013+014+015+016+017TST-ChatGPT.md) | PUBLISHED |
 
