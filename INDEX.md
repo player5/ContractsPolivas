@@ -4,15 +4,6 @@
 
 | Contract ID | Тип | Исполнитель | Карточка | Промпт | Состояние |
 |---|---|---|---|---|---|
-| **C040D000TST** | C | DeepSeek | [C040D000TST](contracts/C040D000TST.md) | [Задание](prompts/C040D000TST-DeepSeek.md) | PUBLISHED |
-| **C041D000TST** | C | DeepSeek | [C041D000TST](contracts/C041D000TST.md) | [Задание](prompts/C041D000TST-DeepSeek.md) | PUBLISHED |
-| **C042D000TST** | C | DeepSeek | [C042D000TST](contracts/C042D000TST.md) | [Задание](prompts/C042D000TST-DeepSeek.md) | PUBLISHED |
-| **C043G000TST** | C | Gemini | [C043G000TST](contracts/C043G000TST.md) | [Задание](prompts/C043G000TST-Gemini.md) | PUBLISHED |
-| **C044G000TST** | C | Gemini | [C044G000TST](contracts/C044G000TST.md) | [Задание](prompts/C044G000TST-Gemini.md) | PUBLISHED |
-| **C045G000TST** | C | Gemini | [C045G000TST](contracts/C045G000TST.md) | [Задание](prompts/C045G000TST-Gemini.md) | PUBLISHED |
-| **C046G000TST** | C | Gemini | [C046G000TST](contracts/C046G000TST.md) | [Задание](prompts/C046G000TST-Gemini.md) | PUBLISHED |
-| **C047G000TST** | C | Gemini | [C047G000TST](contracts/C047G000TST.md) | [Задание](prompts/C047G000TST-Gemini.md) | PUBLISHED |
-| **V048C038+039+040+041+042+043+044+045+046+047TST** | V | ChatGPT | [V048C038+039+040+041+042+043+044+045+046+047TST](contracts/V048C038+039+040+041+042+043+044+045+046+047TST.md) | [Задание](prompts/V048C038+039+040+041+042+043+044+045+046+047TST-ChatGPT.md) | PUBLISHED |
 
 **Уточнение для Dispatcher 0.9.1 / Firefox Worker 0.8.5 (24.11.2026):** для новых контрактов действует верхнее уточнение [NUMBERING.md](NUMBERING.md): прямая доставка результатов D/G в GPT независимо от готовности Validator; выдача зависимого задания разрешена только после успешного чтения INDEX, в котором отсутствуют все сквозные номера блокеров. Получение ответа и BROWN_FINISH сами по себе зависимость не снимают. Старое описание пилота ниже сохранено для истории.
 
