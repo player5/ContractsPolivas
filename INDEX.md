@@ -4,8 +4,6 @@
 
 | Contract ID | Тип | Исполнитель | Карточка | Промпт | Состояние |
 |---|---|---|---|---|---|
-| **C038D000TST** | C | DeepSeek | [C038D000TST](contracts/C038D000TST.md) | [Задание](prompts/C038D000TST-DeepSeek.md) | PUBLISHED |
-| **C039D000TST** | C | DeepSeek | [C039D000TST](contracts/C039D000TST.md) | [Задание](prompts/C039D000TST-DeepSeek.md) | PUBLISHED |
 | **C040D000TST** | C | DeepSeek | [C040D000TST](contracts/C040D000TST.md) | [Задание](prompts/C040D000TST-DeepSeek.md) | PUBLISHED |
 | **C041D000TST** | C | DeepSeek | [C041D000TST](contracts/C041D000TST.md) | [Задание](prompts/C041D000TST-DeepSeek.md) | PUBLISHED |
 | **C042D000TST** | C | DeepSeek | [C042D000TST](contracts/C042D000TST.md) | [Задание](prompts/C042D000TST-DeepSeek.md) | PUBLISHED |
