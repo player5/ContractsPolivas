@@ -4,7 +4,6 @@
 
 | Contract ID | Тип | Исполнитель | Карточка | Промпт | Состояние |
 |---|---|---|---|---|---|
-| **V002C001TST** | V / независимая проверка | ChatGPT | [V002C001TST](contracts/V002C001TST.md) | [полный промпт](prompts/V002C001TST-ChatGPT.md) | PUBLISHED / READY_WHEN_C001_RESPONSE_CAPTURED / DEP C001 |
 
 ## Что делает Dispatcher
 
