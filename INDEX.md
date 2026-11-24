@@ -4,7 +4,6 @@
 
 | Contract ID | Тип | Исполнитель | Карточка | Промпт | Состояние |
 |---|---|---|---|---|---|
-| **C001D000TST** | C / 100 слов | DeepSeek | [C001D000TST](contracts/C001D000TST.md) | [полный промпт](prompts/C001D000TST-DeepSeek.md) | PUBLISHED / RESULT_CAPTURED / AWAITING_NEXT_GPT_TASK / I2 A1 |
 | **V002C001TST** | V / независимая проверка | ChatGPT | [V002C001TST](contracts/V002C001TST.md) | [полный промпт](prompts/V002C001TST-ChatGPT.md) | PUBLISHED / READY_WHEN_C001_RESPONSE_CAPTURED / DEP C001 |
 
 ## Что делает Dispatcher
