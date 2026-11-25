@@ -1,0 +1,65 @@
+BROWN SWARM — независимый Validator
+V067C049+050+051+052+053+054+055+056+057+058+059+060+061+062+063+064+065+066TST
+INDEX.md прочитан: активная таблица содержит только собственный ID; все 18 блокеров отсутствуют.
+Метод: проверены фактически сохранённые тексты; маркеры BROWN_FINISH исключены, слова разделены пробельными символами, физические строки не реконструированы. Оценка относится к сохранённым файлам, а не к возможному исходному отображению в чате.
+
+C049D000TST — FAIL — 81/100 слов; связный русский текст по теме.
+https://github.com/player5/ContractsPolivas/blob/main/results/PUB-C049D000TST-I1-A1.txt
+
+C050D000TST — FAIL — 32/50 слов; связный русский текст по теме.
+https://github.com/player5/ContractsPolivas/blob/main/results/PUB-C050D000TST-I1-A1.txt
+
+C051D000TST — FAIL — 30 различных названий животных (морская свинка — одно название), но 1 строка вместо 30.
+https://github.com/player5/ContractsPolivas/blob/main/results/PUB-C051D000TST-I1-A1.txt
+
+C052D000TST — FAIL — 20/20 верных произведений 17×1–17×20, порядок верен; 1 строка вместо 20.
+https://github.com/player5/ContractsPolivas/blob/main/results/PUB-C052D000TST-I1-A1.txt
+
+C053D000TST — PASS — 10/10 законченных предложений, русский рассказ о заводском роботе, без заголовка.
+https://github.com/player5/ContractsPolivas/blob/main/results/PUB-C053D000TST-I1-A1.txt
+
+C054D000TST — FAIL — 20/20 различных правильных пар столиц и стран (Берн — федеральный город Швейцарии); 1 строка вместо 20.
+https://github.com/player5/ContractsPolivas/blob/main/results/PUB-C054D000TST-I1-A1.txt
+
+C055D000TST — PASS — 25/25 простых чисел от 2 до 97, без пропусков, повторов или составных чисел; 1 отсутствует.
+https://github.com/player5/ContractsPolivas/blob/main/results/PUB-C055D000TST-I1-A1.txt
+
+C056D000TST — FAIL — 30/30 верных квадратов 1–30, порядок верен; 1 строка вместо 30.
+https://github.com/player5/ContractsPolivas/blob/main/results/PUB-C056D000TST-I1-A1.txt
+
+C057D000TST — FAIL — 128/150 слов; связный русский текст о производстве подливы.
+https://github.com/player5/ContractsPolivas/blob/main/results/PUB-C057D000TST-I1-A1.txt
+
+C058D000TST — FAIL — 25 различных профессий, но 1 строка вместо 25.
+https://github.com/player5/ContractsPolivas/blob/main/results/PUB-C058D000TST-I1-A1.txt
+
+C059D000TST — FAIL — 20/20 верных кубов 1–20, порядок верен; 1 строка вместо 20.
+https://github.com/player5/ContractsPolivas/blob/main/results/PUB-C059D000TST-I1-A1.txt
+
+C060D000TST — PASS — 30/30 чисел Фибоначчи, начало 0, 1, конец 514229; все рекуррентные значения верны.
+https://github.com/player5/ContractsPolivas/blob/main/results/PUB-C060D000TST-I1-A1.txt
+
+C061D000TST — PASS — 15/15 законченных предложений, русский рассказ о поломке шоколадной фабрики, без заголовка.
+https://github.com/player5/ContractsPolivas/blob/main/results/PUB-C061D000TST-I1-A1.txt
+
+C062D000TST — FAIL — 20/20 различных элементов, символы и атомные номера 1–20 верны; 1 строка вместо 20.
+https://github.com/player5/ContractsPolivas/blob/main/results/PUB-C062D000TST-I1-A1.txt
+
+C063D000TST — FAIL — 146/200 слов; связный русский текст о совместной работе трёх ИИ.
+https://github.com/player5/ContractsPolivas/blob/main/results/PUB-C063D000TST-I1-A1.txt
+
+C064G000TST — PASS — обе найденные версии text/plain имеют допустимые имена, 1000 строк, 1000 различных целых чисел; каждая строка равна её номеру, от 1 до 1000, без пустых строк и заголовков. Какая попытка доставлена, не установлено; обе проверены, произвольного выбора нет.
+https://drive.google.com/file/d/1bozK5kVuyuvCJBG6WBXQ4cU4rqMlwB9b/view
+https://drive.google.com/file/d/156YIErC1bn2E37Fj661EXgnNOeyy2egO/view
+
+C065G000TST — PASS — обе версии text/plain с допустимыми суффиксами v1/v2 прочитаны: 100 непустых строк, 100 уникальных русских названий животных, без нумерации и заголовков. Названия включают широкие группы (например, обезьяна, кит), а пантера неоднозначна; контракт не требует отдельных биологических видов, поэтому проверены различные названия. Обе версии имеют одинаковый список; какая доставлена, не установлено. Также найдены три нативных Google Docs с тем же основным именем без .txt, не являющиеся требуемыми текстовыми файлами:
+https://drive.google.com/file/d/1AoIlSdsu8oZWDMyE_Wd1gHsadyjMGdIR/view
+https://drive.google.com/file/d/1cXlLKt9CXgBV0emCo1ekWotFV_B2j-TZ/view
+https://docs.google.com/document/d/1RLU288Sgj1NFGewnKMLSSSFTkUMykjZWxhtgJ1WZlFQ/edit
+https://docs.google.com/document/d/1rWUw4QzhqGguftd3lbpVNuOa40AAuT_I5sd-UPHUuHo/edit
+https://docs.google.com/document/d/1f3HR7rcbCf2okZf7u2wNVhvFd475suM4F5VXN-iszhI/edit
+
+C066G000TST — BLOCKED — поиск по точному ID и имени в трёх доступных аккаунтах Drive не вернул файлов; типовой путь results/PUB-C066G000TST-I1-A1.txt вернул 404, поиск GitHub по ID пуст. Фактический источник не установлен; 20×20 значений не проверены.
+
+ИТОГ: PASS 6; FAIL 11; BLOCKED 1; всего 18.
+Чужие результаты не изменены.
