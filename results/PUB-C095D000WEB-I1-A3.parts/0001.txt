@@ -1,0 +1,751 @@
+C095D000WEB — Tree: wire revision/ACK adapter
+
+Попытка: PUB-C095D000WEB-I1-A3
+Роль: Worker / резервный исполнитель
+Продолжение: CRM-UI-WIDGETS-027
+Тип результата: TEXT source in chat.
+
+Использую реализацию A2 как основу. Сохраняю публичные функции toHostEvent, fromHostAck, ограничения транспортного протокола и автономность адаптера.
+
+Дополнительно закрываю следующие недостатки предыдущей реализации A2:
+Обработка явного отказа Host 409.
+Исключение мутации входных и возвращённых данных через общие ссылки.
+Защита от опасных JSON-ключей, циклических ссылок и невалидных JSON-значений.
+Проверка точной границы 128 KiB и многобайтовых UTF-8 данных.
+Неизменяемый allowlist событий.
+Проверка конкурентных ACK относительно актуальной ревизии.
+
+1. Source refs
+
+Источник  	  Значение
+Repository  	  player5/SEKA_WEB
+CODE_REF branch  	  feature/crm034-ui-integrity-20261120
+CODE_REF commit  	  30507c3fd17ffdb65640b47d6c2d4be048909377
+DOCS_REF commit  	  17c4ab6f754a76f6ccb5dde408313d1e4b0ef4ae
+Write set  	  implementation/crm027/tree_wire_alpha/**
+Dependencies  	  Нет внешних зависимостей
+License dependencies  	  Не применимо
+
+Source refs предоставлены постановщиком. Их наличие не является подтверждением самостоятельного чтения репозитория.
+
+2. Полные исходные файлы
+
+Файл 1 — implementation/crm027/tree_wire_alpha/wire.js
+
+JavaScript
+
+'use strict';
+
+const LIMITS = Object.freeze({
+  EVENT_MAX_BYTES: 32768,
+  PATCH_MAX_OPS: 120,
+  PATCH_MAX_BYTES: 131072,
+  ALLOWED_EVENTS: Object.freeze([
+    'expand', 'select', 'context', 'move'
+  ])
+});
+
+const encoder = new TextEncoder();
+
+const plain = v =>
+  v !== null &&
+  typeof v === 'object' &&
+  [Object.prototype, null].includes(
+    Object.getPrototypeOf(v)
+  );
+
+const revision = v =>
+  typeof v === 'string' && v.length > 0;
+
+function fail(code, message) {
+  throw Object.assign(new Error(message), { code });
+}
+
+function clone(v, depth = 0) {
+  if (depth > 64) {
+    fail(400, 'JSON nesting limit');
+  }
+
+  if (
+    v === null ||
+    typeof v === 'string' ||
+    typeof v === 'boolean' ||
+    (typeof v === 'number' && Number.isFinite(v))
+  ) {
+    return v;
+  }
+
+  const array = Array.isArray(v);
+
+  if (!array && !plain(v)) {
+    fail(400, 'invalid JSON value');
+  }
+
+  const out = array ? [] : {};
+  const keys = Reflect.ownKeys(v);
+
+  if (array && keys.length !== v.length + 1) {
+    fail(400, 'invalid array');
+  }
+
+  for (const k of keys) {
+    if (array && k === 'length') continue;
+
+    if (
+      typeof k !== 'string' ||
+      ['\_\_proto\_\_', 'constructor', 'prototype'].includes(k)
+    ) {
+      fail(400, 'unsafe JSON key');
+    }
+
+    if (
+      array &&
+      (!/^(0|[1-9]\d\*)$/.test(k) ||
+        Number(k) >= v.length)
+    ) {
+      fail(400, 'invalid array index');
+    }
+
+    const d = Object.getOwnPropertyDescriptor(v, k);
+
+    if (!d.enumerable || !Object.hasOwn(d, 'value')) {
+      fail(400, 'invalid JSON property');
+    }
+
+    out[k] = clone(d.value, depth + 1);
+  }
+
+  return out;
+}
+
+function size(v, max) {
+  if (encoder.encode(JSON.stringify(v)).length > max) {
+    fail(400, 'payload exceeds limit');
+  }
+}
+
+function toHostEvent(input) {
+  const v = clone(input);
+
+  if (
+    !plain(v) ||
+    !revision(v.event) ||
+    !revision(v.revision) ||
+    !plain(v.data)
+  ) {
+    fail(400, 'invalid event');
+  }
+
+  if (!LIMITS.ALLOWED_EVENTS.includes(v.event)) {
+    fail(403, 'disallowed event');
+  }
+
+  const event = {
+    event: v.event,
+    revision: v.revision,
+    data: v.data
+  };
+
+  size(event, LIMITS.EVENT_MAX_BYTES);
+
+  return event;
+}
+
+function fromHostAck(input, expectedRevision) {
+  try {
+    const v = clone(input);
+
+    if (!plain(v) || !revision(expectedRevision)) {
+      fail(400, 'invalid ACK');
+    }
+
+    for (const code of [403, 409]) {
+      if (v.code === code || v.status === code) {
+        fail(
+          code,
+          typeof v.error === 'string'
+            ? v.error
+            : 'host refusal'
+        );
+      }
+    }
+
+    if (
+      v.ok === false ||
+      (v.code !== undefined && v.code !== 200) ||
+      (v.status !== undefined && v.status !== 200)
+    ) {
+      fail(400, 'host refusal');
+    }
+
+    if (
+      !revision(v.baseRevision) ||
+      !revision(v.revision)
+    ) {
+      fail(400, 'invalid revision');
+    }
+
+    if (
+      v.baseRevision !== expectedRevision ||
+      v.revision === expectedRevision
+    ) {
+      fail(409, 'revision conflict');
+    }
+
+    if (
+      !Array.isArray(v.patch) ||
+      v.patch.length > LIMITS.PATCH_MAX_OPS ||
+      !v.patch.every(plain)
+    ) {
+      fail(400, 'invalid patch');
+    }
+
+    size(v.patch, LIMITS.PATCH_MAX_BYTES);
+
+    return {
+      ok: true,
+      revision: v.revision,
+      patch: v.patch
+    };
+  } catch (e) {
+    return {
+      ok: false,
+      code: [403, 409].includes(e.code)
+        ? e.code
+        : 400,
+      error: typeof e.message === 'string'
+        ? e.message
+        : 'invalid ACK'
+    };
+  }
+}
+
+module.exports = {
+  toHostEvent,
+  fromHostAck,
+  LIMITS
+};
+
+Файл 2 — implementation/crm027/tree_wire_alpha/wire.test.js
+
+JavaScript
+
+'use strict';
+
+const test = require('node:test');
+const assert = require('node:assert/strict');
+
+const {
+  toHostEvent: E,
+  fromHostAck: A,
+  LIMITS: L
+} = require('./wire');
+
+const event = data => ({
+  event: 'expand',
+  revision: 'r1',
+  data
+});
+
+const ack = patch => ({
+  baseRevision: 'r1',
+  revision: 'r2',
+  patch
+});
+
+const bytes = v =>
+  Buffer.byteLength(JSON.stringify(v));
+
+const throwsCode = (fn, code) =>
+  assert.throws(fn, { code });
+
+test('allowed events and detached data', () => {
+  for (const name of L.ALLOWED_EVENTS) {
+    const input = {
+      ...event({ id: 'n1' }),
+      event: name
+    };
+
+    const out = E(input);
+
+    assert.deepEqual(out, input);
+
+    out.data.id = 'other';
+
+    assert.equal(input.data.id, 'n1');
+  }
+
+  assert.throws(() =>
+    L.ALLOWED_EVENTS.push('delete')
+  );
+});
+
+test('403 and host 409', () => {
+  throwsCode(
+    () => E({
+      ...event({}),
+      event: 'delete'
+    }),
+    403
+  );
+
+  for (const code of [403, 409]) {
+    for (const key of ['code', 'status']) {
+      assert.equal(
+        A({ [key]\: code }, 'r1').code,
+        code
+      );
+    }
+  }
+
+  assert.equal(
+    A({ ...ack([]), ok: false }, 'r1').ok,
+    false
+  );
+});
+
+test('opaque string revisions', () => {
+  assert.equal(
+    A(ack([]), 'r2').code,
+    409
+  );
+
+  assert.equal(
+    A({ ...ack([]), revision: 'r1' }, 'r1').code,
+    409
+  );
+
+  assert.equal(
+    A({ ...ack([]), revision: 2 }, 'r1').code,
+    400
+  );
+
+  assert.equal(
+    A(ack([]), 1).code,
+    400
+  );
+
+  assert.equal(
+    A({
+      baseRevision: 'z',
+      revision: 'a',
+      patch: []
+    }, 'z').ok,
+    true
+  );
+});
+
+test('invalid payloads and unsafe keys', () => {
+  const cycle = {};
+  cycle.self = cycle;
+
+  for (const data of [
+    null,
+    [],
+    { x: NaN },
+    { x: undefined },
+    cycle,
+    JSON.parse('{"\_\_proto\_\_":{}}'),
+    {
+      get x() {
+        throw Error('getter');
+      }
+    }
+  ]) {
+    throwsCode(() => E(event(data)), 400);
+  }
+
+  for (const patch of [
+    null,
+    undefined,
+    {},
+    [null],
+    [{ x: Infinity }],
+    [JSON.parse('{"constructor":{}}')],
+    Array(1)
+  ]) {
+    assert.equal(
+      A(ack(patch), 'r1').code,
+      400
+    );
+  }
+});
+
+test('event exact UTF-8 limit', () => {
+  const data = { pad: 'é' };
+
+  data.pad += 'x'.repeat(
+    L.EVENT_MAX_BYTES - bytes(event(data))
+  );
+
+  assert.equal(
+    bytes(E(event(data))),
+    32768
+  );
+
+  data.pad += 'x';
+
+  throwsCode(
+    () => E(event(data)),
+    400
+  );
+});
+
+test('patch operation count', () => {
+  const patch = Array.from(
+    { length: 120 },
+    () => ({ op: 'replace' })
+  );
+
+  assert.equal(
+    A(ack(patch), 'r1').ok,
+    true
+  );
+
+  patch.push({});
+
+  assert.equal(
+    A(ack(patch), 'r1').code,
+    400
+  );
+});
+
+test('patch exact UTF-8 limit and detached patch', () => {
+  const patch = [{
+    op: 'replace',
+    value: 'é'
+  }];
+
+  patch[0].value += 'x'.repeat(
+    L.PATCH_MAX_BYTES - bytes(patch)
+  );
+
+  const result = A(ack(patch), 'r1');
+
+  assert.equal(result.ok, true);
+  assert.equal(bytes(result.patch), 131072);
+
+  result.patch[0].value = '';
+
+  assert.equal(bytes(patch), 131072);
+
+  patch[0].value += 'x';
+
+  assert.equal(
+    A(ack(patch), 'r1').code,
+    400
+  );
+});
+
+test('two concurrent events and refusal preserves view', () => {
+  for (const order of [[0, 1], [1, 0]]) {
+    let view = {
+      revision: 'r1',
+      nodes: []
+    };
+
+    const events = ['expand', 'select'].map(
+      name => E({
+        ...event({}),
+        event: name
+      })
+    );
+
+    const replies = events.map(
+      (e, i) => ({
+        baseRevision: e.revision,
+        revision: 'r' + (i + 2),
+        patch: [{ id: i }]
+      })
+    );
+
+    const apply = wire => {
+      const r = A(wire, view\.revision);
+
+      if (r.ok) {
+        view = {
+          revision: r.revision,
+          nodes: r.patch
+        };
+      }
+
+      return r;
+    };
+
+    assert.equal(
+      apply(replies[order[0]]).ok,
+      true
+    );
+
+    const before = view;
+    const snapshot = JSON.stringify(view);
+
+    assert.equal(
+      apply(replies[order[1]]).code,
+      409
+    );
+
+    assert.equal(
+      apply({ code: 403 }).code,
+      403
+    );
+
+    assert.equal(
+      apply({
+        ...ack([]),
+        baseRevision: view\.revision,
+        revision: 'r4',
+        patch: null
+      }).code,
+      400
+    );
+
+    assert.equal(view, before);
+
+    assert.equal(
+      JSON.stringify(view),
+      snapshot
+    );
+  }
+});
+
+Файл 3 — implementation/crm027/tree_wire_alpha/README.md
+
+Markdown
+
+# Tree Wire Revision/ACK Adapter
+
+Contract: C095D000WEB
+Continuation: CRM-UI-WIDGETS-027
+Delivery: PUB-C095D000WEB-I1-A3
+
+## Purpose
+
+Standalone transport adapter between Tree 082 and SEKA API v1.
+
+No changes to the existing Tree implementations, shared host, platform runtime or application registration.
+
+## Source references
+
+Repository: player5/SEKA_WEB
+
+CODE_REF: feature/crm034-ui-integrity-20261120 30507c3fd17ffdb65640b47d6c2d4be048909377
+
+DOCS_REF: 17c4ab6f754a76f6ccb5dde408313d1e4b0ef4ae
+
+References supplied by the contract owner. Independent repository inspection not performed.
+
+## Public API
+
+### toHostEvent(input)
+
+Input:
+
+    {
+      event: string,
+      revision: string,
+      data: PlainObject
+    }
+
+Allowed events:
+
+- expand
+- select
+- context
+- move
+
+Returns a detached JSON-compatible event object.
+
+The serialized outgoing event must not exceed 32768 UTF-8 bytes.
+
+Throws an Error with numeric code:
+
+- 400: invalid payload or exceeded size limit.
+- 403: event outside the allowlist.
+
+### fromHostAck(wire, expectedRevision)
+
+Host ACK:
+
+    {
+      baseRevision: string,
+      revision: string,
+      patch: Array\<PlainObject>
+    }
+
+Success:
+
+    {
+      ok: true,
+      revision: string,
+      patch: Array\<PlainObject>
+    }
+
+Failure:
+
+    {
+      ok: false,
+      code: number,
+      error: string
+    }
+
+Success requires:
+
+1. Non-empty string revisions.
+2. baseRevision strictly equals expectedRevision.
+3. revision differs from expectedRevision.
+4. patch is an array of at most 120 plain objects.
+5. Serialized patch is at most 131072 UTF-8 bytes.
+6. No explicit host refusal.
+
+Revision tokens are opaque strings. Do not coerce them to numbers or compare them lexicographically.
+
+Supported refusal codes:
+
+- 400: invalid payload.
+- 403: forbidden.
+- 409: conflict or stale revision.
+
+Explicit host code/status 403 and 409 are preserved.
+
+Other explicit unsuccessful statuses become 400.
+
+## Security and validation
+
+The adapter:
+
+- Does not use DOM, storage or network.
+- Does not mutate input data.
+- Does not retain input object references.
+- Rejects non-finite numbers and undefined.
+- Rejects accessors and non-JSON objects.
+- Rejects sparse arrays and unsafe property names.
+- Rejects cyclic or excessively nested structures.
+- Limits JSON nesting depth to 64.
+- Measures serialized sizes in UTF-8 bytes.
+- Exposes an immutable event allowlist.
+
+The nesting limit and reserved property names are defensive implementation choices, not independently verified requirements of the SEKA specification.
+
+The adapter expects parsed JSON or ordinary objects, not adversarial executable JavaScript Proxy objects.
+
+Transport-level body limits must also be enforced before JSON parsing by the host.
+
+Patch operation semantics are outside this module. A valid transport ACK does not prove that a patch is safe or applicable to a particular view.
+
+The adapter does not implement JSON Patch, authorization, ACL enforcement or server-side transaction handling.
+
+## Execution
+
+Requirements:
+
+- Node.js 18 or newer.
+- No npm dependencies.
+
+CommonJS module:
+
+    const {
+      toHostEvent,
+      fromHostAck
+    } = require('./wire');
+
+Tests:
+
+    bash cd implementation/crm027/tree_wire_alpha
+    node --version
+    node --test wire.test.js
+
+Compact test reporter on Node.js 22:
+
+    node --test --test-reporter=dot wire.test.js
+
+For an ESM-only package or browser runtime, CRM034 must provide the appropriate module wrapper.
+
+No bundler or shared loader changes are included.
+
+## Concurrency
+
+Multiple events may be dispatched from the same current revision.
+
+The receiving layer must compare each ACK against the current committed revision at application time, not only against the revision captured at dispatch.
+
+The first successfully committed ACK advances the current revision.
+
+Subsequent ACKs referring to the old base revision must be rejected with 409.
+
+Revision validation and state commit must occur without an asynchronous gap, or under equivalent transactional coordination.
+
+Revision uniqueness and replay protection across the full revision history remain host responsibilities.
+
+## CRM034 handoff
+
+Recommended integration sequence:
+
+1. Capture the current committed revision.
+2. Validate outgoing Tree event with toHostEvent.
+3. Submit the event through the existing host API.
+4. Receive the host ACK.
+5. Re-read the current committed revision.
+6. Validate the ACK with fromHostAck.
+7. On refusal, retain the current view and revision.
+8. On success, validate patch operation semantics.
+9. Apply the patch to an isolated draft view.
+10. Commit the draft and revision atomically.
+11. On 409, schedule controlled resynchronization.
+
+Illustrative synchronous commit boundary:
+
+\`\`\`javascript
+function acceptAck(wire, state, applyPatch) {
+  const result = fromHostAck(
+    wire,
+    state.revision
+  );
+
+  if (!result.ok) {
+    return { state, result };
+  }
+
+  try {
+    const draft = structuredClone(state.view);
+
+    const nextView = applyPatch(
+      draft,
+      result.patch
+    );
+
+    return {
+      state: {
+        view: nextView,
+        revision: result.revision
+      },
+      result
+    };
+  } catch {
+    return {
+      state,
+      result: {
+        ok: false,
+        code: 400,
+        error: 'patch application failed'
+      }
+    };
+  }
+}
+\`\`\`
+
+The example assumes applyPatch is synchronous, validates operation semantics, returns the next view and does not perform external side effects.
+
+Do not assign patch directly to viewOrNodes. The patch describes changes, not a complete Tree view.
+
+CRM034 owns the bridge from the validated wire ACK to the legacy Tree 082 result format:
+
+    {
+      ok: true,
+      revision,
+      viewOrNodes
+    }
+
+The actual viewOrNodes value must be produced by the existing validated patch application layer.
+
+## Tes
