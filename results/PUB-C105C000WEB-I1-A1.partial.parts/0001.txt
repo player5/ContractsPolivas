@@ -1,0 +1,171 @@
+C105C000WEB — исходная проверка GitHub доступ подтверждён
+
+Репозиторий player5/SEKA_WEB закрытый.
+Подключение подтверждает права admin, push, maintain.
+
+Проверены:
+
+CODE_REF: 30507c3fd17ffdb65640b47d6c2d4be048909377.
+
+DOCS_REF: 17c4ab6f754a76f6ccb5dde408313d1e4b0ef4ae.
+
+Ветка feature/crm034-ui-integrity-20261120 действительно указывает на CODE_REF.
+
+Все четыре обязательных документа DOCS_REF прочитаны.
+
+Старый CRM026-контракт, updater, API, ZIP verifier и существующие тесты найдены и прочитаны.
+
+Уточнение путей: исходники находятся в implementation/release013/staged/seka_web/, а не в корне репозитория. Поэтому первоначальные 404 не являются отсутствием исходников.
+
+Архитектурное ограничение: существующий updater использует quiesce/drained/restart/readiness/resume, тогда как согласованный межмодульный контракт предусматривает activate_release и контроль generation. Изменять готовый updater или общий host нельзя. Новая реализация должна быть изолированным адаптером.
+
+1. GitHub delivery Записано и проверено
+
+Репозиторий: player5/SEKA_WEB
+
+Рабочая ветка: feature/crm026-host-compat-20261126
+
+Итоговый commit:
+
+dcd8f2afbb7e7c23e02896e1594725fcb9ab7a53
+
+Открыть feature branch Открыть итоговый commit
+
+3 commits относительно CODE_REF.
+
+10 новых файлов.
+
+0 изменённых существующих файлов.
+
+0 удалений.
+
+Ветка опережает базу на 3 commits, отставание — 0.
+
+Все 10 файлов прочитаны обратно через GitHub. Blob SHA совпали с SHA созданных объектов.
+
+2. Реализовано
+
+Главный файл:
+
+implementation/crm026/host_compat_delta/lifecycle_adapter.py
+
+Добавлен адаптер между старым CRM026 API и generation-aware host API:
+
+quiesce;
+
+drained;
+
+activate_release;
+
+generation verification;
+
+readiness;
+
+generation-fenced resume.
+
+Дополнительно реализованы:
+
+проверка разрешённых module ID;
+
+проверка активного manifest и backend;
+
+отказ при symlink и некорректных путях;
+
+разрешение release ref через доверенный каталог;
+
+отказ при неоднозначных версиях;
+
+восстановление после ручного restart с проверкой нового поколения.
+
+Готовый updater 026 не переписывался.
+
+3. Новые тесты
+
+Созданы четыре тестовых файла, всего 13 тестовых сценариев:
+
+Тест  	  Проверяемая область
+test_crm026_host_compat_adapter.py  	  Generation, activation, symlink, stale ACK
+test_crm026_host_compat_ab_rollback.py  	  A/B update и rollback
+test_crm026_host_compat_faults.py  	  Повреждённый пакет, crash recovery
+test_crm026_host_compat_concurrency.py  	  Конкурирующие обновления
+
+Особенно важен A/B сценарий:
+
+Установка A версии 1.0.0.
+
+Обновление A до 1.1.0.
+
+Rollback A.
+
+Сравнение байтового дерева A с первоначальным.
+
+Проверка неизменности дерева B.
+
+Проверка неизменности generation B.
+
+Проверка нового generation A после каждого успешного переключения.
+
+Тесты NOT RUN
+
+Исполняемые тесты созданы, но реального запуска и stdout в этой сессии нет. Не объявляю их PASS.
+
+Причина: имеющийся CRM034 GitHub Actions workflow запускается только вручную (workflow_dispatch), автоматического запуска при push нет, а доступного действия запуска workflow в подключении нет.
+
+4. Передача CRM034
+
+Документация создана и записана
+
+CRM026_HOST_COMPAT_HANDOFF.md
+
+CRM026_HOST_COMPAT_SELF_AUDIT.md
+
+CRM026_HOST_COMPAT_RESULT_REPORT.md
+
+WORKLOG.md
+
+Главный блокер для интегратора:
+
+Текущий CRM030 IsolationSupervisor предоставляет restart() с булевым результатом, а generation хранится во внутреннем объекте worker. Публичного generation-aware интерфейса пока нет.
+
+Поэтому CRM034 должен предоставить публичный facade с проверяемыми:
+
+generation;
+
+activate_release;
+
+readiness(module, generation, release_ref);
+
+resume(module, generation).
+
+Использовать приватное поле \_workers в качестве обходного решения запрещено.
+
+5. Исследование готовых решений
+
+Проверены GitHub-проекты TUF, tufup и pluggy, их назначение и лицензии. Ни один не является готовой заменой требуемого адаптера. Найденные Issues SEKA_WEB также не содержат подходящего готового решения.
+
+Сторонний код не копировался, зависимости не добавлялись.
+
+6. Итог
+
+Пункт  	  Результат
+Проверка исходных refs  	  PASS
+Проверка GitHub write access  	  PASS
+Feature branch и commits  	  PASS
+Запись файлов  	  PASS
+Read-back файлов  	  PASS
+Собственный A/B тест  	  NOT RUN
+Старая регрессия CRM026  	  NOT RUN
+Mutation test  	  NOT RUN
+Реальная интеграция CRM030  	  BLOCKED
+Независимая приёмка  	  NOT RUN
+Merge / deployment  	  Не выполнялись
+
+Почему PARTIAL: код, тесты и handoff опубликованы, но нет фактического исполнения тестов и публичного generation-aware host facade. Называть всю задачу DONE было бы недостоверно.
+
+ID C105C000WEB в очереди ContractsPolivas оставлен активным согласно правилу для PARTIAL.
+
+Итоговая строка отчёта в GitHub:
+
+STATUS_EXECUTION: PARTIAL
+
+BROWN_FINISH|v1|C105C000WEB|PUB-C105C000WEB-I1-A1|DISPATCH-NKxXxSVmxlhVVyDd8B|PARTIAL
