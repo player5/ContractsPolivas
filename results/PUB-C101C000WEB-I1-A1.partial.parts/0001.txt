@@ -1,0 +1,167 @@
+C101C000WEB — CRM028 ACL
+
+GitHub доступ подтверждён
+Выполнение начато
+
+Репозиторий player5/SEKA_WEB — private. Подключение имеет права admin, push, maintain.
+
+Подтверждены исходные точки:
+
+CODE_REF: 30507c3fd17ffdb65640b47d6c2d4be048909377.
+
+DOCS_REF: 17c4ab6f754a76f6ccb5dde408313d1e4b0ef4ae.
+
+seka_web/permissions_runtime.py успешно прочитан.
+
+release013/staged/seka_web/permissions_runtime.py по указанному CODE_REF возвращает 404. Это пока не трактуется как отсутствие реализации в другом дереве.
+
+Существующий PermissionService содержит declared, allowed, require, объектные ACL и проверку межмодульного вызова. Новую IAM-систему создавать не требуется.
+
+C101C000WEB — результат реализации
+
+PARTIAL
+Код опубликован и проверен чтением
+
+1. GitHub результат
+
+Репозиторий: player5/SEKA_WEB
+
+Ветка: feature/crm028-acl-delta-c101-20261126
+
+Базовый SHA: 30507c3fd17ffdb65640b47d6c2d4be048909377
+
+Итоговый HEAD: 54635b19fd7bac5fe4962d6c04e0c26980314226
+
+Ссылки:
+
+Открыть feature branch
+
+Итоговый commit
+
+Результат выполнения
+
+SELF-AUDIT
+
+2. Созданные файлы
+
+Реализация:
+
+implementation/crm028/acl_delta/\_\_init\_\_.py
+
+implementation/crm028/acl_delta/adapter.py
+
+implementation/crm028/acl_delta/README.md
+
+implementation/crm028/acl_delta/CRM034_HANDOFF.md
+
+Тесты:
+
+- tests/test_crm028_acl_delta_runtime.py
+
+Документация:
+
+docs/CRM028_ACL_DELTA_WORKLOG.md
+
+docs/CRM028_ACL_DELTA_SELF_AUDIT.md
+
+docs/CRM028_ACL_DELTA_RESULT_REPORT.md
+
+3. Реализованная функциональность
+
+Объектные проверки через существующий PermissionService.
+
+Полевые ACL с приоритетом запрета над разрешением.
+
+Отдельные ACL для списков и экспорта.
+
+Фильтрация запрещённых объектов при выдаче списка.
+
+Запрет экспорта при недоступности хотя бы одного объекта или поля.
+
+Проверка declared capabilities.
+
+Запрет чужого module_caller.
+
+Сохранение существующего поведения disabled modules.
+
+Проверка родительского объекта даже при пустом наборе полей.
+
+Новая IAM-система и новые SQL-таблицы не создавались.
+
+4. Тестовая матрица
+
+Проверка  	  Результат
+
+Два пользователя, два модуля  	  NOT RUN
+
+Object deny-overrides-allow  	  NOT RUN
+
+Field deny-overrides-allow  	  NOT RUN
+
+List ACL  	  NOT RUN
+
+Export ACL  	  NOT RUN
+
+Unknown capability — 403  	  NOT RUN
+
+Disabled module — 409  	  NOT RUN
+
+Foreign module_caller — 403  	  NOT RUN
+
+Auth regression, пароль минимум 4 символа  	  NOT RUN
+
+Все перечисленные проверки включены в новый исполняемый pytest-файл. Фактического запуска pytest в доступной среде не было.
+
+Фактическая проверка GitHub:
+
+8 файлов прочитаны обратно.
+
+Все 8 blob SHA совпали с опубликованными.
+
+Сравнение с исходным CODE_REF подтвердило ровно 8 новых файлов.
+
+Изменений вне разрешённого write_set нет.
+
+5. CRM034 handoff
+
+Подготовлен отдельный документ:
+
+CRM034_HANDOFF.md
+
+Он определяет:
+
+точку подключения через app.state.crm034_permissions;
+
+получение module identity только из доверенного host/IPC;
+
+обработку HTTP 403/404/409/503;
+
+необходимость сохранения default-off;
+
+границу ответственности CRM036.
+
+Прямое делегирование CRM036 не имитировалось.
+
+6. Незавершённое и ограничения
+
+Новый pytest и старые CRM028 regression suites — NOT RUN.
+
+CRM034 staged-host integration — NOT RUN.
+
+Реальная проверка bootstrap/login min4 — NOT RUN.
+
+PostgreSQL 18 и SQL Manager — NOT RUN.
+
+Mutation negative-control — NOT RUN.
+
+Независимый Validator — NOT RUN.
+
+PR не создавался. Merge, deploy и изменения основной ветки не выполнялись.
+
+INDEX.md: строка C101C000WEB оставлена активной, поскольку тестовая приёмка ещё не подтверждена.
+
+Итог: кодовая дельта и документация опубликованы, GitHub read-back подтверждён. До исполнения тестов и независимой проверки контракт остаётся PARTIAL.
+
+STATUS_EXECUTION: PARTIAL
+
+BROWN_FINISH|v1|C101C000WEB|PUB-C101C000WEB-I1-A1|DISPATCH-VWb-QiJFERaz-boERk|PARTIAL
