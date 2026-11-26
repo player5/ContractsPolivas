@@ -1,0 +1,130 @@
+C100C000WEB — CRM035 DevKit GitHub access confirmed
+
+Подтверждён доступ к закрытому репозиторию player5/SEKA_WEB.
+Права подключения: admin, push.
+
+Проверены оба заданных исходных коммита:
+
+Источник  	  SHA  	  Результат
+CODE_REF  	  30507c3fd17ffdb65640b47d6c2d4be048909377  	  Доступен
+DOCS_REF  	  17c4ab6f754a76f6ccb5dde408313d1e4b0ef4ae  	  Доступен
+
+Исходный implementation/crm035/cli.py прочитан по указанному blob SHA. Работа ведётся как изолированная разработка, без изменения main, shared host и посторонних модулей.
+
+Результат C100C000WEB
+
+PARTIAL
+Реализация записана в приватной feature branch и проверена повторным чтением GitHub.
+
+Ветка: feature/crm100-crm035-doctor-delta-20261126
+
+Финальный коммит: acce18fd0da330e74176b017616cd55453a35ee1
+
+Открыть ветку
+Открыть финальный коммит
+
+Ветка опережает исходную базу на 4 коммита, отставания нет.
+
+1. Что реализовано
+
+implementation/crm035/validator.py
+
+Согласована проверка readPermission с настоящим host API.
+
+Добавлена поддержка schema-advanced.
+
+Исправлена нормализация навигации.
+
+Обработка ошибок импорта host validator.
+
+Добавлена диагностика HOST_RESULT_INVALID.
+
+Добавлена диагностика HOST_ACCEPTED_LOCAL_REJECTED.
+
+Отсутствие host теперь явно отображается как NOT VERIFIED, а не PASS.
+
+Запрещена ложная legacy-навигация backendless data_only.
+
+tests/test_crm035_e2e_and_negative.py
+
+Добавлены проверки:
+
+CLI init, validate, doctor для трёх шаблонов.
+
+Сверка с настоящим inspect_module().
+
+Права навигации и schema-advanced.
+
+Неверные разрешения.
+
+Backendless navigation.
+
+Ошибки загрузки host.
+
+Реальный сценарий copy → load → enable через API ядра на изолированной SQLite/TestClient.
+
+Проверка legacy HTTP 200, schema view HTTP 200, data_only HTTP 404 и отключённого legacy HTTP 409.
+
+Существующие проверки path traversal, overwrite, duplicate navigation, security и mutation сохранены.
+
+2. Документы и handoff
+
+Все семь изменённых файлов находятся внутри разрешённого write_set.
+
+implementation/crm035/WORKLOG.md — журнал работ.
+
+implementation/crm035/integration_handoff.md — передача CRM034.
+
+docs/CRM-MODULE-DEVKIT-035_README.md — дополнение инструкции.
+
+docs/CRM-MODULE-DEVKIT-035_SELF_AUDIT.md — самоаудит.
+
+docs/CRM-MODULE-DEVKIT-035_RESULT_REPORT.md — полный отчёт.
+
+implementation/crm035/validator.py
+
+tests/test_crm035_e2e_and_negative.py
+
+Повторное чтение всех семи файлов подтверждено.
+
+3. Проверки и незавершённое
+
+Проверка  	  Статус
+Доступ и source refs  	  PASS
+Проверка настоящего host API  	  PASS — чтение исходников
+Создание feature branch и commit  	  PASS
+Запись и readback файлов  	  PASS
+Добавление новых тестов  	  COMPLETE
+Полный запуск unittest  	  NOT RUN
+Реальный copy→enable TestClient  	  NOT RUN
+Windows / PostgreSQL / Chromium  	  NOT RUN
+Независимый Validator  	  NOT RUN
+
+Причина: локальный Python 3.13.5 доступен, но дерево приватного репозитория не смонтировано. GitHub Actions доступны только через ручной запуск, соответствующего действия запуска в подключении нет.
+
+Команда для следующего исполнителя:
+
+Bash
+python -m unittest discover -s tests -p 'test_crm035_\*.py' -v
+
+Фактический stdout отсутствует. Исторические PASS предыдущей версии не засчитываются как доказательства C100.
+
+4. Ограничения сохранности
+
+main не изменён.
+
+Shared host не изменён.
+
+SQL DDL и deployment не выполнялись.
+
+Merge не выполнялся.
+
+Data-only интерактивная навигация остаётся ограничением host API v1.
+
+Handoff CRM034 записан.
+
+INDEX.md не изменялся. ID C100 не снимается с очереди, поскольку тестовое выполнение и независимая проверка не завершены.
+
+STATUS_EXECUTION: PARTIAL
+
+BROWN_FINISH|v1|C100C000WEB|PUB-C100C000WEB-I1-A1|DISPATCH-GDKlSBXTzSiq5I3DaU|PARTIAL
