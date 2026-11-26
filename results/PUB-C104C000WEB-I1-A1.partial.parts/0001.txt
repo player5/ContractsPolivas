@@ -6,7 +6,7 @@ C104C000WEB — CRM029 GitHub access confirmed
 
 CODE_REF: 30507c3fd17ffdb65640b47d6c2d4be048909377.  
 
-DОCS_REF: 17c4ab6f754a76f6ccb5dde408313d1e4b0ef4ae.  
+DOCS_REF: 17c4ab6f754a76f6ccb5dde408313d1e4b0ef4ae.  
 
 Источники не подменяются веткой main. Реализация должна остаться изолированной от общего host и существующего FileService.  
 
