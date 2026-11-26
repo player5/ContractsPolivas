@@ -12,7 +12,6 @@ Dispatcher читает публичную таблицу. Только успе
 | **C099C000WEB** | C | ChatGPT | [C099C000WEB](contracts/C099C000WEB.md) | [Задание](prompts/C099C000WEB-ChatGPT.md) | PUBLISHED |
 | **C100C000WEB** | C | ChatGPT | [C100C000WEB](contracts/C100C000WEB.md) | [Задание](prompts/C100C000WEB-ChatGPT.md) | PUBLISHED |
 | **C101C000WEB** | C | ChatGPT | [C101C000WEB](contracts/C101C000WEB.md) | [Задание](prompts/C101C000WEB-ChatGPT.md) | PUBLISHED |
-| **C102C000WEB** | C | ChatGPT | [C102C000WEB](contracts/C102C000WEB.md) | [Задание](prompts/C102C000WEB-ChatGPT.md) | PUBLISHED |
 | **C103C000WEB** | C | ChatGPT | [C103C000WEB](contracts/C103C000WEB.md) | [Задание](prompts/C103C000WEB-ChatGPT.md) | PUBLISHED |
 | **C104C000WEB** | C | ChatGPT | [C104C000WEB](contracts/C104C000WEB.md) | [Задание](prompts/C104C000WEB-ChatGPT.md) | PUBLISHED |
 | **C105C000WEB** | C | ChatGPT | [C105C000WEB](contracts/C105C000WEB.md) | [Задание](prompts/C105C000WEB-ChatGPT.md) | PUBLISHED |
