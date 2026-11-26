@@ -1,0 +1,189 @@
+t evidence
+
+Worker execution:
+
+    Node.js v22.16.0
+
+Command:
+
+    node --test --test-reporter=dot wire.test.js
+
+Final stdout:
+
+    ........
+    Exit code:
+    0
+
+Eight test groups passed. Existing Tree 082 regression tests: NOT RUN. SEKA integration tests: NOT RUN. Independent QA: NOT RUN.
+
+## Restrictions
+
+Authorized write set:
+
+    implementation/crm027/tree_wire_alpha/**
+
+Do not modify:
+
+- Existing Tree 082 implementations.
+- shared core.
+- view_runtime.
+- view_widgets.
+- module_loader.
+- manifest_validator.
+- platform_api.
+- static/index.html.
+- sekamap.
+- Legacy contracts.
+- Login or themes.
+- Production server or workstation.
+
+No SQL changes. No deployment. No merge.
+
+Shared host changes belong exclusively to CRM034 after independent QA.
+
+## NEXT
+
+1. Materialize these three source files.
+2. Run the standalone tests in the target checkout.
+3. Inspect both existing Tree 082 implementations.
+4. Verify integration against CODE_REF and DOCS_REF.
+5. Run existing Tree and host regression tests.
+6. Obtain independent QA.
+7. Hand off to CRM034.
+
+Worker test success is not independent QA approval. Project status remains WIP.
+
+3. Фактическое выполнение тестов
+
+В отличие от предыдущей попытки A2, в текущей среде действительно доступен Node.js. Адаптер и тесты были созданы во временной изолированной директории и запущены.
+
+Локальные тесты Worker 8 / 8
+
+PASS
+
+Пройдено 8 Ошибок 0 Exit code 0 Runtime: Node.js v22.16.0.
+
+Независимый QA не проводился.
+
+Фактическая версия среды:
+
+Обычный текст v22.16.0
+
+Команда запуска:
+
+Bash node --test --test-reporter=dot wire.test.js
+
+Фактический итоговый stdout с дополнительно выведенным кодом завершения:
+
+Обычный текст ........ EXIT=0
+
+При первом запуске обнаружилась ошибка тестовой фикстуры конкурентных ACK: проверка невалидного patch случайно использовала уже действующую ревизию и закономерно получала 409 вместо ожидаемого 400.
+
+Фикстура исправлена: для проверки невалидного patch используется новая ревизия r4. После исправления выполнен повторный запуск всех восьми тестовых групп.
+
+Итоговый результат — PASS.
+
+4. Матрица проверок
+
+Проверка  	  Результат
+Разрешённые expand/select/context/move  	  PASS
+Запрещённое событие  	  PASS
+Host 403  	  PASS
+Host 409  	  PASS
+Устаревшая строковая ревизия  	  PASS
+Неизменившаяся ревизия  	  PASS
+Числовая ревизия  	  PASS
+Непорядковые строковые ревизии  	  PASS
+Невалидный JSON payload  	  PASS
+Циклическая структура  	  PASS
+Опасные JSON-ключи  	  PASS
+Getter во входных данных  	  PASS
+Event ровно 32 768 байт  	  PASS
+Event 32 769 байт  	  PASS
+Patch 120 операций  	  PASS
+Patch 121 операция  	  PASS
+Patch ровно 131 072 байта  	  PASS
+Patch 131 073 байта  	  PASS
+Многобайтовый UTF-8  	  PASS
+Изоляция входных данных  	  PASS
+Изоляция возвращённого patch  	  PASS
+Два конкурентных события  	  PASS
+Оба порядка получения ACK  	  PASS
+Неизменность view при 403  	  PASS
+Неизменность view при 409  	  PASS
+Неизменность view при 400  	  PASS
+Регрессионные тесты существующего 082  	  NOT RUN
+Интеграционные тесты SEKA  	  NOT RUN
+Независимый QA  	  NOT RUN
+
+Таблица отражает отдельные сценарии внутри восьми реально запущенных тестовых групп, а не 26 самостоятельных запусков.
+
+5. Безопасность и ограничения
+
+Использованы встроенные возможности JavaScript и Node.js. Сторонние библиотеки не добавлены.
+
+Самостоятельно принятые защитные решения: ограничение вложенности JSON до 64 уровней, запрет ключей \_\_proto\_\_, constructor, prototype, поддержка явных отказов через поля code и status.
+
+Семантика конкретных patch-операций намеренно не реализована: предоставленный контракт не определяет их полную схему. Подмена существующего механизма применения patch недопустима.
+
+Ограничение размера проверяется на сериализованном JSON. Host должен дополнительно ограничивать исходный сетевой payload до его разбора.
+
+6. Проверка источников и готовых решений
+
+Действие  	  Статус
+Использование исходного результата A2  	  COMPLETE
+Чтение обеих сохранённых реализаций 082  	  NOT RUN
+Самостоятельное чтение CODE_REF  	  NOT RUN
+Самостоятельное чтение DOCS_REF  	  NOT RUN
+Поиск готовых GitHub-решений и Issues  	  NOT RUN
+Проверка лицензий сторонних зависимостей  	  N/A — отсутствуют
+Локальная проверка автономного адаптера  	  COMPLETE
+
+Внешние проверки репозитория не выполнялись. Реализация основана на самодостаточном техническом задании и переданном исходном результате A2. Совместимость с фактическим кодом SEKA отдельно не подтверждена.
+
+7. Собственные результаты и соблюдение write_set
+
+Подготовлены три полных исходных файла:
+
+Обычный текст implementation/crm027/tree_wire_alpha/
+├── wire.js
+├── wire.test.js
+└── README.md
+
+Формат сдачи TEXT source in chat соблюдён.
+
+Запись в целевой GitHub-репозиторий не производилась. Коммит не создавался. Существующие файлы, shared host, сервер, база данных и другие контракты не изменялись.
+
+Деплой и merge не выполнялись.
+
+8. Незавершённое и NEXT
+
+Автономная реализация и её локальная проверка завершены. Для последующего этапа CRM034 остаются проверка интеграционного интерфейса по указанным source refs, существующие регрессионные тесты, проверка семантики patch и независимый QA.
+
+Передача в CRM034 должна осуществляться без изменения shared host до получения независимого QA PASS.
+
+9. Итоговый статус
+
+Обычный текст
+
+CONTRACT_ID: C095D000WEB
+DELIVERY_ID: PUB-C095D000WEB-I1-A3
+ROLE: WORKER
+RESULT_TYPE: TEXT_SOURCE_IN_CHAT
+STATUS_EXECUTION: COMPLETE
+SOURCE_FILES: 3/3
+WORKER_TEST_GROUPS: 8/8
+WORKER_TEST_RESULT: PASS
+REGRESSION_082: NOT RUN
+INTEGRATION_TESTS: NOT RUN
+INDEPENDENT_QA: NOT RUN
+EXTERNAL_SOURCE_REVIEW: NOT RUN
+DEPENDENCIES: NONE
+SHARED_HOST_CHANGED: NO
+DEPLOY: NO
+MERGE: NO
+NEXT: INDEPENDENT_QA_AND_CRM034_HANDOFF
+
+DONE относится к выполнению автономного задания Worker и сдаче трёх исходных файлов с фактическим локальным прогоном тестов. Не является независимым PASS, подтверждением интеграционной совместимости или разрешением на релиз.
+
+BROWN_FINISH|v1|C095D000WEB|PUB-C095D000WEB-I1-A3|DISPATCH-2Ib_30WM1c__9PZKPu|DONE
