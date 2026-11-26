@@ -5,7 +5,6 @@ Dispatcher читает публичную таблицу. Только успе
 | Contract ID | Тип | Исполнитель | Карточка | Промпт | Состояние |
 |---|---|---|---|---|---|
 | **C094D000WEB** | C | DeepSeek | [C094D000WEB](contracts/C094D000WEB.md) | [Задание](prompts/C094D000WEB-DeepSeek.md) | PUBLISHED |
-| **C095D000WEB** | C | DeepSeek | [C095D000WEB](contracts/C095D000WEB.md) | [Задание](prompts/C095D000WEB-DeepSeek.md) | PUBLISHED |
 | **C096G000WEB** | C | Gemini | [C096G000WEB](contracts/C096G000WEB.md) | [Задание](prompts/C096G000WEB-Gemini.md) | PUBLISHED |
 | **C097C000WEB** | C | ChatGPT | [C097C000WEB](contracts/C097C000WEB.md) | [Задание](prompts/C097C000WEB-ChatGPT.md) | PUBLISHED |
 | **C098C000WEB** | C | ChatGPT | [C098C000WEB](contracts/C098C000WEB.md) | [Задание](prompts/C098C000WEB-ChatGPT.md) | PUBLISHED |
